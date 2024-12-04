@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./django_backend
+      dockerfile: ./dockerfile  # Dockerfile for Django
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./django_backend:/app
+    environment:
+      - DEBUG=True
+
+  frontend:
+    build:
+      context: ./react-frontend  # Path to React app folder
+      dockerfile: ./myapp/dockerfile  # Dockerfile for React
+    ports:
+      - "3000:5000"
+    stdin_open: true  # Keep the container running for development
+    volumes:
+      - ./react-frontend:/app
+      - /myapp/node_modules
+    command: npm start
